@@ -1,4 +1,4 @@
-package org.example;
+package org.smartkode;
 
 import com.opencsv.CSVReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.util.List;
 
 public class readFiles {
-    public static List<String[]> readCSV(List<String[]> data, CSVReader csvReader) throws IOException, CsvValidationException {
+    public List<String[]> readCSV(List<String[]> data, CSVReader csvReader) throws IOException, CsvValidationException {
         String[] lines;
 
         while ((lines = csvReader.readNext()) != null) {
