@@ -1,4 +1,4 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
 public class ImporteAFacturar {
     private double subtotal;
@@ -32,9 +32,9 @@ public class ImporteAFacturar {
     @Override
     public String toString() {
         return "ImporteAFacturar{" +
-                "subtotal=" + subtotal +
-                ", iva=" + iva +
-                ", total=" + total +
-                '}';
+                "\nsubtotal=" + subtotal +
+                ",\niva=" + iva +
+                ",\ntotal=" + total +
+                "\n}";
     }
 }

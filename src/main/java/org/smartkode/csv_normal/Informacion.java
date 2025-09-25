@@ -1,4 +1,4 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
 public class Informacion {
     private int director_clave;

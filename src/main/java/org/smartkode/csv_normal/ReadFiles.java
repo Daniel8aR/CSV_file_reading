@@ -1,10 +1,10 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
 import com.opencsv.CSVReader;
-import java.io.IOException;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ReadFiles {
@@ -28,20 +28,6 @@ public class ReadFiles {
         }
         return filtered.toArray(new String[0]);
     }
-
-//    public void printData(List<String[]> data){
-//        int i=0;
-//        for(String[] row: data){
-//            int j=0;
-//            System.out.print("i_" + i + ":  ");
-//            for(String col: row) {
-//                System.out.print("j_" + j + ":  " + col + " ");
-//                j++;
-//            }
-//            i++;
-//            System.out.println();
-//        }
-//    }
 
     public void printData(List<String[]> data){
         for(String[] row: data){

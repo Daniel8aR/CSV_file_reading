@@ -1,13 +1,12 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
-import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Honorarios {
-    private Map<String, List<String[]>> seccionesList = new HashMap<String, List<String[]>>();
+    private Map<String, List<String[]>> seccionesList = new HashMap<>();
     private static Map<String, List<Double>> totalPrimaNeta = new HashMap<>();
     private static Map<String, List<Double>> primaNetaDlsAMn = new HashMap<>();
     private static double total_honorarios;
@@ -22,7 +21,9 @@ public class Honorarios {
     }
 
     public void setHonorarios(String[] row, String seccion) {
-        row = rd.removeElements(row, false, false,true);
+        if (rd.isEmptyString(row[3]))
+            row = rd.removeElements(row, false, false,true);
+
         seccionesList.putIfAbsent(seccion, new ArrayList<>());
         seccionesList.get(seccion).add(row);
     }

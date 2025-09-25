@@ -1,4 +1,4 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ public class Conceptos {
     }
 
     public void printConceptos() {
+        System.out.println("\n--- CONCEPTOS ---");
         for (Map.Entry<String, List<String[]>> entry : listaConceptos.entrySet()) {
             String seccion = entry.getKey();
             List<String[]> filas = entry.getValue();

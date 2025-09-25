@@ -1,4 +1,4 @@
-package org.smartkode;
+package org.smartkode.csv_normal;
 
 import java.util.ArrayList;
 import java.util.List;
