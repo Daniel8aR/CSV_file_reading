@@ -1,9 +1,11 @@
 package org.smartkode;
 
 import com.opencsv.CSVReader;
-import org.smartkode.csv_normal.ReadFiles;
-import org.smartkode.csv_odq.Info_ODQ;
-import org.smartkode.csv_odq.Oficinas;
+import org.smartkode.csv_comun.Informacion;
+import org.smartkode.csv_comun.ReadFiles;
+import org.smartkode.csv_tipos.Tipos_CSV;
+import org.smartkode.csv_tipos.csv_odq.Info_ODQ;
+import org.smartkode.csv_tipos.csv_odq.Oficinas;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -27,32 +29,31 @@ public class Main_odq {
             e.printStackTrace();
         }
 
-        boolean inf = false;
-        Info_ODQ info = new Info_ODQ();
-        Oficinas reporte = new Oficinas();
-        String seccion = "";
+        Informacion info = new Informacion();
+        String col;
+        int id_estructura = 0;
 
         for(String[] row: data) {
-            String col = (!inf) ? rf.normanalizeString(row, 0) : rf.normanalizeString(row, 1);
-            if (!inf) {
-                if (col.equals("director")) info.setDirector(row[1].stripLeading());
-                else if (col.equals("tipodeoficina")) info.setTipoOficina(row[1].stripLeading());
-                else if (col.equals("periodocierre")) info.setPeriodoCierre(row[1].stripLeading());
-                else if (col.equals("tipodecambio")) info.setTipoCambio(Double.parseDouble(row[1].stripLeading()));
-                else if (col.equals("cveofi")) inf = true;
-                continue;
-            }
-
-            if (rf.isEmptyString(col)){
-                col = rf.normanalizeString(row, 4);
-
-                if (!col.equals("totalodqs")) reporte.setOficinas(row, ".");
-                else reporte.setTotales(row);
-            } else reporte.setOficinas(row, row[1].stripLeading().stripTrailing());
+            col = rf.normanalizeString(row, 0);
+            if (col.equals("CVEOFI")) break;
+            info.setInformacion(row, col);
         }
 
-        System.out.println(info.toString());
-        reporte.printData();
-//        rf.printData(data);
+        Tipos_CSV tipo = new Tipos_CSV();
+        for(String[] row: data) {
+            if (row.length > 2 ) {
+                col = rf.normanalizeString(row, 1);
+                if (col.equals("honorarios")) {
+                    tipo.setTipo_categoria(3);
+                    break;
+                }
+            }
+        }
+
+        tipo.setTipo(3, id_estructura, data);
+
+        System.out.println(info.toString() + "\n");
+        System.out.println(tipo.getTipo_categoria());
+        System.out.println(tipo.toString());
     }
 }

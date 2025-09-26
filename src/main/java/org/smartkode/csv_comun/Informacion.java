@@ -1,4 +1,4 @@
-package org.smartkode.csv_normal;
+package org.smartkode.csv_comun;
 
 public class Informacion {
     private int director_clave;
@@ -101,7 +101,7 @@ public class Informacion {
         this.tipo_cambio = tipo_cambio;
     }
 
-    public void setHonorarios(String[] row, String col) {
+    public void setInformacion(String[] row, String col) {
         if (col.equals("director")) {
             String[] directors = row[1].split(" ", 2);
 

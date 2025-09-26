@@ -1,8 +1,13 @@
 package org.smartkode;
 
 import com.opencsv.CSVReader;
-import org.smartkode.csv_especial.NegociosEspeciales;
-import org.smartkode.csv_normal.*;
+import org.smartkode.Grupos.Grupo;
+import org.smartkode.csv_comun.ImporteAFacturar;
+import org.smartkode.csv_comun.Informacion;
+import org.smartkode.csv_comun.ReadFiles;
+import org.smartkode.csv_tipos.Tipos_CSV;
+import org.smartkode.descuentos_factura.DescuentosFac;
+import org.smartkode.descuentos_impuestos.Descuentos_Impuestos;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -15,8 +20,8 @@ public class Main_especial {
         ReadFiles rf = new ReadFiles();
 
         try {
-            InputStream inputStream = Main_especial.class.getResourceAsStream("/csv_files/29548-307-202508.csv");
-//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/03628-576-202505.csv");
+//            InputStream inputStream = Main_especial.class.getResourceAsStream("/csv_files/29548-307-202508.csv");
+            InputStream inputStream = Main_especial.class.getResourceAsStream("/csv_files/03628-576-202505.csv");
             CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream));
             data = rf.readCSV(data, csvReader);
 
@@ -25,105 +30,49 @@ public class Main_especial {
             e.printStackTrace();
         }
 
-        boolean inf=false, negEsp=false, descuentos=false, importFacturar=false, descuentosF=false, conceps=false;
         Informacion info = new Informacion();
-        NegociosEspeciales negociosEsp = new NegociosEspeciales();
-        Descuentos des = new Descuentos();
-        ImporteAFacturar imp = new ImporteAFacturar();
-        DescuentosFac df = new DescuentosFac();
-        Conceptos conceptos = new Conceptos();
-        String seccion = "";
-
+        String col;
+        int id_estructura = 0;
         for(String[] row: data) {
-            String col = rf.normanalizeString(row, 0);
-//            System.out.println("Col: " + col);
-            if (!inf) {
-                if (col.equals("negociosespeciales")) {
-                    inf = true;
-                    continue;
-                }
-                info.setHonorarios(row, col);
-                continue;
-            }
-            if (!negEsp) {
-                negociosEsp.setName(row[0]);
-                negociosEsp.setPrima_devengada(Double.parseDouble(row[1]));
-                negociosEsp.setSiniestralidad(row[2]);
-                negociosEsp.setPor_honorario(row[3]);
-                negociosEsp.setSubtotal(Double.parseDouble(row[4]));
-
-                negEsp = true;
-                continue;
-            }
-            if (!descuentos) {
-                if (row.length > 1) {
-                    col = rf.normanalizeString(row, 1);
-                    if(!rf.isEmptyString(col)){
-                        if (col.equals("subtotal")) des.setSubtotal(Double.parseDouble(row[2]));
-                        else des.setDescuentos(row);
-                    } else {
-                        col = rf.normanalizeString(row, 3);
-                        if ((col.equals("totaldescuentos"))) {
-                            des.setTotal(Double.parseDouble(row[4].stripLeading()));
-                            descuentos = true;
-                        }
-                    }
-                }
-                continue;
-            }
-
-            if (!importFacturar) {
-                if (row.length > 2) {
-                    col = rf.normanalizeString(row, 3);
-                    if (col.equals("subtotal")) imp.setSubtotal(Double.parseDouble(row[4]));
-                    if (col.equals("iva")) imp.setIva(Double.parseDouble(row[4]));
-                    if (col.equals("total")) {
-                        importFacturar = true;
-                        imp.setTotal(Double.parseDouble(row[4]));
-                    }
-                }
-                continue;
-            }
-
-            if (!descuentosF) {
-                if (row.length > 1) {
-                    col = rf.normanalizeString(row, 3);
-                    if (col.equals("total"))
-                        df.setTotal(Double.parseDouble(row[4]));
-                    else if (col.equals("importeapagar")) {
-                        df.setImportePagar(Double.parseDouble(row[4]));
-                        descuentosF = true;
-                    } else {
-                        col = rf.normanalizeString(row, 1);
-                        if (!col.equals("concepto")){
-                            col = rf.normanalizeString(row, 3);
-                            if (!rf.isEmptyString(col)) df.setHonorarios(row);
-                            else {
-                                System.out.println("Muy corto 1");
-                                descuentosF = true;
-                            }
-                        }
-                    }
-                } else {
-                    System.out.println("Muy corto 2");
-                    descuentosF = true;
-                }
-                continue;
-            }
-
-            if (!conceps){
-                String colVer = rf.normanalizeString(row, 1);
-                if (!rf.isEmptyString(col)) conceptos.setConceptos(row, seccion);
-                else seccion = colVer;
-            }
+            col = rf.normanalizeString(row, 0);
+            if (col.equals("negociosespeciales")) break;
+            info.setInformacion(row, col);
         }
 
-        System.out.println(info.toString() + "\n\n");
-        System.out.println(negociosEsp.toString() + "\n\n");
-        System.out.println();
-        des.getDescuentos();
+        Tipos_CSV tipo = new Tipos_CSV();
+        for(String[] row: data) {
+            if (row.length > 2 ) {
+                col = rf.normanalizeString(row, 1);
+                if (col.equals("honorarios")) {
+                    tipo.setTipo_categoria(2);
+                    break;
+                }
+            }
+        }
+        tipo.setTipo(0,  id_estructura, data);
+
+
+        Descuentos_Impuestos des = new Descuentos_Impuestos();
+        des.reviewData(0, id_estructura, tipo.getTipo_categoria(), data);
+
+        ImporteAFacturar imp = new ImporteAFacturar();
+        imp.setFacturar(0, id_estructura, data);
+
+
+        DescuentosFac df = new DescuentosFac();
+        df.reviewData(0, id_estructura, data);
+
+        Grupo gp = new Grupo();
+        gp.setGrupo(0, id_estructura, data);
+
+
+        System.out.println(info.toString() + "\n");
+        System.out.println(tipo.toString());
+        System.out.println("\n" + des.toString());
         System.out.println("\n" + imp.toString() + "\n");
-        conceptos.printConceptos();
+        System.out.println(df.toString());
+        System.out.println("\n\n" + gp.toString());
+
 
 //        rf.printData(data);
     }

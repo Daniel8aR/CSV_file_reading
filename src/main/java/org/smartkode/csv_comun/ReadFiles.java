@@ -1,4 +1,4 @@
-package org.smartkode.csv_normal;
+package org.smartkode.csv_comun;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
