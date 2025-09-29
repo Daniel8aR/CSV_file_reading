@@ -69,17 +69,14 @@ public class Oficinas {
         this.oficina_total = oficina_total;
     }
 
-    public void setAgentes(String [] row, Agentes agente) {
+    public void setAgentes(Agentes agente) {
         agentesList.add(agente);
     }
 
     public void setAgentesHonorarios(String [] row, Agentes agente) {
         String[] check = row[4].split(" ");
-        if (check[0].equals("TOTAL")) {
-            agente.agenteTotales(row);
-        } else {
-            agente.addAgenteHonorario(row);
-        }
+        if (check[0].equals("TOTAL")) agente.agenteTotales(row);
+        else agente.addAgenteHonorario(row);
     }
 
     public void setOficinaTotales (String[] row){
@@ -92,7 +89,6 @@ public class Oficinas {
         }
 
         setNombre_oficina(row[1]);
-
         setSiniestralidad(row[2]);
 
         bg = new BigDecimal(row[5]);
@@ -122,9 +118,9 @@ public class Oficinas {
         for (Agentes agentes : agentesList)
             sb.append(agentes.toString());
 
-        sb.append(cve_ofi + "\t");
+        sb.append(cve_ofi + "\t\t");
         sb.append(nombre_oficina + "\t");
-        sb.append(siniestralidad + "\t\tTotal Oficina\t\t\t");
+        sb.append(siniestralidad + "\t\t\t\t\t\tTotal Oficina\t\t\t");
         sb.append(oficina_prima_neta_m_n + "\t\t");
         sb.append(oficina_prima_neta_dll + "\t\t\t\t\t");
         sb.append(oficina_total_honorarios + "\t\t");

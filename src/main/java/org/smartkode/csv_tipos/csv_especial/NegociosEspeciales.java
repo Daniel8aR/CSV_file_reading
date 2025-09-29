@@ -1,10 +1,10 @@
 package org.smartkode.csv_tipos.csv_especial;
 
 import org.smartkode.csv_comun.ReadFiles;
-
+import org.smartkode.csv_tipos.base.TipoCSV;
 import java.util.List;
 
-public class NegociosEspeciales {
+public class NegociosEspeciales implements TipoCSV {
     private long id_negociosE;
     private long id_tipo;
 
@@ -63,7 +63,7 @@ public class NegociosEspeciales {
         this.subtotal = subtotal;
     }
 
-    public void setNegociosEsp(long id_negociosE, long id_tipo, List<String[]> data) {
+    public void cargarDatos (long id_negociosE, long id_tipo, List<String[]> data) {
         setId_negociosE(id_negociosE);
         setId_tipo(id_tipo);
         boolean ver = false;

@@ -48,11 +48,8 @@ public class ReadFiles {
         return str.trim().isEmpty();
     }
 
-    public String[] removeElements(String[] row, boolean fist, boolean middle, boolean last){
-        if (middle) row = ArrayUtils.remove(row, 2);
-        if (last) row = ArrayUtils.remove(row, 3);
-        if (fist) row = ArrayUtils.remove(row, 0);
-        return row;
+    public boolean isNumeric(String str) {
+        return str.matches("\\d+(\\.\\d+)?"); // enteros o decimales
     }
 
 }

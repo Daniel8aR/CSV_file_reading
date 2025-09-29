@@ -1,12 +1,12 @@
 package org.smartkode.csv_tipos.csv_odq;
 
 import org.smartkode.csv_comun.ReadFiles;
-
+import org.smartkode.csv_tipos.base.TipoCSV;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Info_ODQ {
+public class Info_ODQ  implements TipoCSV {
     private long id_odq;
     private long id_tipo;
 
@@ -92,38 +92,32 @@ public class Info_ODQ {
         this.total_total = total_total;
     }
 
-    public void setTablaOdq (long id_odq, long id_tipo, List<String[]> data) {
+    public void cargarDatos (long id_odq, long id_tipo, List<String[]> data) {
         setId_odq(id_odq);
         setId_tipo(id_tipo);
         boolean ver = false;
-        long i=0, j=0;
-
-        Oficinas of = new Oficinas();;
+        long i=0, j=0; Oficinas of = new Oficinas();
         Agentes agente = null;
+
         for(String[] row: data){
             String col = rf.normanalizeString(row, 0);
+
             if (col.equals("cveofi")) {
                 ver = true;
                 continue;
             }
+
             if (ver) {
                 col = rf.normanalizeString(row, 4);
-
                 if (col.equals("totaloficina")) {
                     oficinas.add(of);
                     of.setOficinaTotales(row);
-                } else if (col.equals("totalodqs")) {
-                    setTotalesOdq(row);
-                } else if (rf.isEmptyString(row[3])) {
-                    System.out.println("Nuevo Agente");
-                    System.out.println("col: " + col);
-                    agente = new Agentes(j++, col);
-                } else if (!rf.isEmptyString(row[3])) {
-                    System.out.println("Nuevo Agente Honorario");
-                    System.out.println("Row[3]: " + row[3]);
-                    of.setAgentesHonorarios(row, agente);
-                } else of = new Oficinas();
-
+                    of = new Oficinas();
+                } else if (col.equals("totalodqs")) setTotalesOdq(row);
+                else if (rf.isEmptyString(row[3])) {
+                    agente = new Agentes(i++, row[4]);
+                    of.setAgentes(agente);
+                } else of.setAgentesHonorarios(row, agente);
             }
         }
     }
@@ -156,14 +150,15 @@ public class Info_ODQ {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        System.out.println("CVE.OFI\tOFICINA\tSINIESTRALIDAD\tCLAVE\tAGENTE\tPRIMA NETA M.N.\tPRIMA NETA DLLS\t% HONORARIOS\tTOTAL HONORARIOS\t2% NUEVOS AGENTES\tSUBTOTAL\tIVA\tTOTAL");
+        System.out.println("CVE.OFI\t\tOFICINA\t\t\tSINIESTRALIDAD\t\tCLAVE\t\t\tAGENTE\t\t\t\tPRIMA NETA M.N.\t\t" +
+                "PRIMA NETA DLLS\t\t" +"% HONORARIOS\t\tTOTAL HONORARIOS\t\t2% NUEVOS AGENTES\t\tSUBTOTAL\t\tIVA\t\tTOTAL");
 
         for (Oficinas oficinas : oficinas)
             sb.append(oficinas.toString()).append("\n");
 
         sb.append(id_odq + " ");
         sb.append(id_tipo + "");
-        sb.append("\t\t\t\t\t\t\t\t\t\tTOTAL ODQ'S" + "\t\t\t\t");
+        sb.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tTOTAL ODQ'S" + "\t\t\t");
         sb.append(total_prima_neta_m_n + "\t\t");
         sb.append(total_prima_neta_dll + "\t\t\t\t\t");
         sb.append(total_total_honorarios + "\t\t");

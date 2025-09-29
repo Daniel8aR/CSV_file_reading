@@ -118,14 +118,11 @@ public class Agentes {
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\t\t\t\t\t\t\t" + grupo_agente + "\n");
-
-        System.out.println("Hola");
-        System.out.println("Agentes Lista: " + listaAgentesHonor.isEmpty());
+        sb.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + grupo_agente + "\n");
         for (AgentesHonorarios agente : listaAgentesHonor)
-            sb.append(agente.toString() + "\n");
+            sb.append(agente.toString());
 
-        sb.append("\t\t\t\t\t\t\tTotal " + grupo_agente + "\t\t\t\t");
+        sb.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tTotal " + grupo_agente + "\t\t\t");
         sb.append(agente_prima_neta_m_n + "\t\t");
         sb.append(agente_prima_neta_dll + "\t\t");
         sb.append(agente_por_honorarios + "\t\t");
@@ -133,7 +130,7 @@ public class Agentes {
         sb.append(agente_nuevos_agentes + "\t\t");
         sb.append(agente_subtotal + "\t\t");
         sb.append(agente_iva + "\t\t");
-        sb.append(agente_total + "\n");
+        sb.append(agente_total + "\n\n");
 
         return sb.toString();
     }

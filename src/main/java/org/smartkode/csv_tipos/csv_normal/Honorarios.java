@@ -1,11 +1,12 @@
 package org.smartkode.csv_tipos.csv_normal;
 
 import org.smartkode.csv_comun.ReadFiles;
+import org.smartkode.csv_tipos.base.TipoCSV;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
-public class Honorarios {
+public class Honorarios implements TipoCSV {
     private long id_honorario;
     private long id_tipo;
     List<Secciones> secciones = new ArrayList<Secciones>();
@@ -43,7 +44,9 @@ public class Honorarios {
         this.total_honorarios = total_honorarios;
     }
 
-    public void setHonorario(List<String[]> data) {
+    public void cargarDatos(long id_honorario, long id_tipo, List<String[]> data) {
+        setId_honorario(id_honorario);
+        setId_tipo(id_tipo);
         boolean clave = false;
         Secciones seccion = null;
 
