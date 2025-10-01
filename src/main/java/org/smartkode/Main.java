@@ -13,17 +13,27 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main_normal {
+public class Main {
     public static void main(String[] args){
 //         Lista para guardar todas las filas del CSV
         List<String[]> data = new ArrayList<>();
         ReadFiles rf = new ReadFiles();
 
         try {
-            InputStream inputStream = Main_normal.class.getResourceAsStream("/csv_files/29548-091-202508.csv");
-//            InputStream inputStream = Main_normal.class.getResourceAsStream("/csv_files/03628-168-202505.csv");
-//            InputStream inputStream = Main_normal.class.getResourceAsStream("/csv_files/29568-060-202508.csv");
-//            InputStream inputStream = Main_normal.class.getResourceAsStream("/csv_files/29548-061-202508.csv");
+//              Archivos ESPECIALES
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/29548-307-202508.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/03628-576-202505.csv");
+
+//              Archivos ODQ
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/19301-ODQ-202508.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/20015-ODQ-202508.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/29548-ODQ-202508.csv");
+
+//              Archivos NORMALES
+            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/29548-091-202508.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/03628-168-202505.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/29568-060-202508.csv");
+//            InputStream inputStream = Main.class.getResourceAsStream("/csv_files/29548-061-202508.csv");
             CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream));
             data = rf.readCSV(data, csvReader);
             csvReader.close();
@@ -31,27 +41,35 @@ public class Main_normal {
             e.printStackTrace();
         }
 
-        Informacion info = new Informacion();
+        Tipos_CSV tipo = new Tipos_CSV();
         String col;
         int id_estructura = 0;
-
         for(String[] row: data) {
-             col = rf.normanalizeString(row, 0);
-            if (col.equals("clave")) break;
-            info.setInformacion(row, col);
-        }
-
-        Tipos_CSV tipo = new Tipos_CSV();
-        for(String[] row: data) {
-            if (row.length > 2 ) {
-                col = rf.normanalizeString(row, 1);
-                if (col.equals("honorarios")) {
+            if (row.length > 2) {
+                col = rf.normanalizeString(row, 2);
+                if (col.equals("oficinadeservicio")) {
                     tipo.setTipo_categoria(1);
+                    break;
+                }
+                if (col.equals("negociosespeciales")) {
+                    tipo.setTipo_categoria(2);
+                    break;
+                }
+                if (col.equals("odq")) {
+                    tipo.setTipo_categoria(3);
                     break;
                 }
             }
         }
         tipo.setTipo(0, id_estructura, data);
+
+        Informacion info = new Informacion();
+        for(String[] row: data) {
+            col = rf.normanalizeString(row, 0);
+            if (col.equals("clave")) break;
+            if (col.equals("negociosespeciales")) break;
+            info.setInformacion(row, col);
+        }
 
         Descuentos_Impuestos des = new Descuentos_Impuestos();
         des.reviewData(0, id_estructura, tipo.getTipo_categoria(), data);
@@ -75,5 +93,4 @@ public class Main_normal {
 
 //        rf.printData(data);
     }
-
 }

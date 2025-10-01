@@ -37,10 +37,6 @@ public class Conceptos {
         listValores.add(new  Valores(j, getId_concepto(), row));
     }
 
-    public void setValor (String[] row, long i){
-
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
